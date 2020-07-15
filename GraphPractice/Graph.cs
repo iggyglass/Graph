@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GraphPractice
 {
-    public class Graph<T>
+    public class Graph<T> where T : IComparable
     {
 
         // TODO:
@@ -105,7 +106,7 @@ namespace GraphPractice
 
             for (int i = 0; i < Vertices.Count; i++)
             {
-                if (value.Equals(Vertices[i]))
+                if (value.CompareTo(Vertices[i].Value) == 0)
                 {
                     n = i;
                     break;
@@ -193,20 +194,45 @@ namespace GraphPractice
             // Todo: add predecessor logic
             Vertex<T> v = Search(start);
             Queue<Vertex<T>> queue = new Queue<Vertex<T>>();
-            List<T> values = new List<T>();
-            List<T> pred = new List<T>();
+            Queue<Vertex<T>> predQueue = new Queue<Vertex<T>>();
+            List<Vertex<T>> values = new List<Vertex<T>>();
+            List<Vertex<T>> predValues = new List<Vertex<T>>();
+
+            queue.Enqueue(v);
+            predQueue.Enqueue(new Vertex<T>(true));
 
             while (queue.Count != 0)
             {
                 Vertex<T> current = queue.Dequeue();
+                Vertex<T> pred = predQueue.Dequeue();
 
                 for (int i = 0; i < current.Neighbors.Count; i++)
                 {
-                    if (!values.Contains(current.Neighbors[i].Value)) queue.Enqueue(current.Neighbors[i]);
+                    if (!values.Contains(current.Neighbors[i]))
+                    {
+                        queue.Enqueue(current.Neighbors[i]);
+                        predQueue.Enqueue(current);
+                    }
                 }
 
-                values.Add(current.Value);
+                values.Add(current);
+                predValues.Add(pred);
+
+                if (current.Value.CompareTo(end) == 0) break;
             }
+
+            List<T> path = new List<T>();
+            int index = values.Count - 1;
+
+            while (!predValues[index].Null)
+            {
+                path.Add(values[index].Value);
+                index = values.IndexOf(predValues[index]);
+            }
+
+            // Todo: add last
+
+            return path;
         }
 
         /// <summary>
