@@ -59,6 +59,30 @@ namespace Tests
             }
         }
 
+        [Theory]
+        [InlineData(new int[] { 2, 1, 0, 3, 4, 7, 5, 6 }, new int[] { 2, 1, 1, 0, 0, 3, 3, 7, 3, 4, 4, 7, 4, 6, 4, 5, 5, 6, 6, 7}, 0, 7, new int[] { 7, 3, 0 })]
+        public void SingleSourceShortestPathTest(int[] values, int[] connections, int start, int end, int[] expected)
+        {
+            Graph<int> graph = new Graph<int>();
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                graph.AddVertex(values[i]);
+            }
+
+            for (int i = 0; i < connections.Length; i += 2)
+            {
+                graph.AddEdge(connections[i], connections[i + 1]);
+            }
+
+            List<int> vals = graph.SingleSourceShortestPath(start, end);
+
+            for (int i = 0; i < vals.Count; i++)
+            {
+                Assert.Equal(expected[i], vals[i]);
+            }
+        }
+
         [Fact]
         public void NullDepthFirstTest()
         {

@@ -6,9 +6,6 @@ namespace GraphPractice
     public class Graph<T> where T : IComparable
     {
 
-        // TODO:
-        //   - Add Single Source Shortest Path + corresponding unit tests: https://www.geeksforgeeks.org/shortest-path-unweighted-graph/
-
         public List<Vertex<T>> Vertices;
         public int Count { get { return Vertices.Count; } }
 
@@ -189,9 +186,14 @@ namespace GraphPractice
             return values;
         }
 
+        /// <summary>
+        /// Returns the shortest path from start to end.
+        /// </summary>
+        /// <param name="start">The start of the path</param>
+        /// <param name="end">The end of the path</param>
+        /// <returns>List of the elements to be traversed on path</returns>
         public List<T> SingleSourceShortestPath(T start, T end)
         {
-            // Todo: add predecessor logic
             Vertex<T> v = Search(start);
             Queue<Vertex<T>> queue = new Queue<Vertex<T>>();
             Queue<Vertex<T>> predQueue = new Queue<Vertex<T>>();
@@ -230,7 +232,7 @@ namespace GraphPractice
                 index = values.IndexOf(predValues[index]);
             }
 
-            // Todo: add last
+            path.Add(values[index].Value);
 
             return path;
         }
@@ -238,9 +240,9 @@ namespace GraphPractice
         /// <summary>
         /// Gets the length of the shortest path
         /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <returns></returns>
+        /// <param name="start">The start of the path</param>
+        /// <param name="end">The end of the path</param>
+        /// <returns>The length of the shortest path</returns>
         public int SingleSourceShortestPathLength(T start, T end)
         {
             return SingleSourceShortestPath(start, end).Count;
